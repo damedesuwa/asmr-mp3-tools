@@ -68,7 +68,7 @@ def make_previews():
         pass
     print("미리보기: 갤러리(또는 파일 앱)의 Download/cover_pick 폴더")
     print("  W1_1.jpg = W1 작품의 1번 후보를 커버로 잘랐을 때 모습")
-    print("고른 뒤:  python3 ~/bin/cover_pick.py W1=번호 W2=번호 ...")
+    print("고른 뒤:  python3 %s W1=번호 W2=번호 ..." % os.path.abspath(sys.argv[0]))
 
 
 def write_map(args):

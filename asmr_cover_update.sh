@@ -11,17 +11,20 @@
 #   - 이미지가 여러 장 -> 적용하지 않고 후보만 보여 줌 (한 장만 남기고 다시 실행)
 #   - 이미 커버가 있는 MP3, 원본 이미지, 음원 데이터는 건드리지 않음
 #
-# 사용:  bash ~/bin/asmr_cover_update.sh            (추가 인자는 본 스크립트로 전달, 예: --work RJ01234567)
-#        bash ~/bin/asmr_cover_update.sh --replace --work RJ01234567   이미 있는 커버를 새 이미지로 교체
-#        bash ~/bin/asmr_cover_update.sh --self-update                 두 스크립트를 최신판으로 교체
+# 사용:  bash ~/asmr_cover_update.sh             SD 카드 Asmr 폴더 (추가 인자는 본체로 전달, 예: --work RJ01234567)
+#        bash ~/asmr_cover_update.sh --local-dir ~/storage/downloads/Moving   휴대폰 폴더
+#        bash ~/asmr_cover_update.sh --replace --work RJ01234567          이미 있는 커버를 새 이미지로 교체
+#        bash ~/asmr_cover_update.sh --self-update                        모든 도구를 최신판으로 교체
 set -euo pipefail
 
-# 본체는 이 스크립트와 같은 폴더에 있으면 그것을, 없으면 ~/bin 의 것을 쓴다
+# 본체는 이 스크립트와 같은 폴더의 것을 쓴다 (예전 설치 위치 ~/bin 도 찾아본다)
 MAIN="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/asmr_cover_embed.sh"
 [ -f "$MAIN" ] || MAIN="$HOME/bin/asmr_cover_embed.sh"
-REPO="damedesuwa/asmr-mp3-tools"
-BRANCH="main"
-TOOL_FILES="snow_convert_final_v3.sh asmr_cover_update.sh asmr_cover_embed.sh cover_pick.py"
+REPO="${ASMR_TOOLS_REPO:-damedesuwa/asmr-mp3-tools}"
+BRANCH="${ASMR_TOOLS_BRANCH:-main}"
+# 저장소 안 경로. 휴대폰에는 이 스크립트 옆에 파일 이름만으로 받는다.
+TOOL_FILES="${ASMR_TOOLS_FILES:-snow_convert_final_v3.sh asmr_cover_update.sh asmr_cover_embed.sh cover_pick.py
+snowsky/snowsky_reorder.sh snowsky/snowsky_imgcheck.sh snowsky/snowsky_audit.sh}"
 STATE="${ASMR_COVER_HOME:-$HOME/.asmr_cover}"
 RULES=(--work-cover --other-images)
 
@@ -35,22 +38,27 @@ self_update() {
     [ -z "$tok" ] && [ -f "$HOME/.asmr_tools_token" ] && tok="$(tr -d ' \r\n' <"$HOME/.asmr_tools_token")"
     [ -n "$tok" ] && auth=(-H "Authorization: Bearer $tok")
     sha="$(curl -fsSL "${auth[@]}" "https://api.github.com/repos/$REPO/commits/$BRANCH" \
-           | python3 -c 'import json,sys; print(json.load(sys.stdin)["sha"])')" || {
+           | python3 -c 'import json,sys; print(json.load(sys.stdin)["sha"])' 2>/dev/null)" || {
         echo "최신 버전 정보를 가져오지 못했습니다."
         [ -n "$tok" ] || echo "  비공개 저장소라면 ~/.asmr_tools_token 에 GitHub 토큰을 넣어 주세요."
         return 1; }
     mkdir -p "$dir"
+    local n names=""
     for f in $TOOL_FILES; do
-        curl -fsSL "${auth[@]}" -H "Accept: application/vnd.github.raw" -o "$dir/$f.new" \
+        n="${f##*/}"
+        curl -fsSL "${auth[@]}" -H "Accept: application/vnd.github.raw" -o "$dir/$n.new" \
             "https://api.github.com/repos/$REPO/contents/$f?ref=$sha" || {
             rm -f "$dir"/*.new; echo "$f 받기 실패"; return 1; }
-        case "$f" in *.sh) bash -n "$dir/$f.new" || { rm -f "$dir"/*.new; echo "$f 문법 오류"; return 1; } ;; esac
+        case "$n" in *.sh) bash -n "$dir/$n.new" || { rm -f "$dir"/*.new; echo "$f 문법 오류"; return 1; } ;; esac
     done
-    for f in $TOOL_FILES; do
-        mv -f "$dir/$f.new" "$dir/$f"
-        case "$f" in *.sh) chmod +x "$dir/$f" ;; esac
+    for f in $TOOL_FILES; do      # 모두 받은 뒤에만 한꺼번에 교체
+        n="${f##*/}"
+        mv -f "$dir/$n.new" "$dir/$n"
+        case "$n" in *.sh) chmod +x "$dir/$n" ;; esac
+        names="$names $n"
     done
-    echo "최신판으로 교체했습니다 (${sha:0:7}): $TOOL_FILES"
+    echo "최신판으로 교체했습니다 (${sha:0:7}):$names"
+    echo "  위치: $dir"
 }
 
 if [ "${1:-}" = "--self-update" ]; then

@@ -1,4 +1,4 @@
-# asmr_cover_embed.sh — Termux SAF MP3 썸네일 삽입기
+# 썸네일 — asmr_cover_update.sh / asmr_cover_embed.sh / cover_pick.py
 
 외장 SD 카드(SAF)의 작품 폴더마다 JPG를 240×240 **Front Cover**로 만들어
 같은 작품의 MP3에 넣는다. 기본 실행은 **DRY RUN**이며 `--apply`를 줘야만 파일이 바뀐다.
@@ -6,7 +6,6 @@
 ## 새 작품을 추가했을 때 (권장)
 
 ```bash
-bash ~/asmr_cover_update.sh --self-update   # 설치 방법은 저장소 README 참고
 bash ~/asmr_cover_update.sh
 ```
 
@@ -21,54 +20,28 @@ bash ~/asmr_cover_update.sh
 ### 휴대폰 내부 저장소 폴더 (SAF 아님)
 
 ```bash
-termux-setup-storage          # 한 번만
-bash ~/bin/asmr_cover_update.sh --local-dir ~/storage/downloads/Moving
+bash ~/asmr_cover_update.sh --local-dir ~/storage/downloads/Moving
 ```
 
 `--local-dir`를 쓰면 termux-saf 대신 일반 파일 경로로 읽고 쓴다. 교체는 같은 폴더의 숨김 임시 파일에 다 쓴 뒤 한 번에 바꾸는 방식이다.
 폴더 자체가 작품 하나라면 `--work-depth 0`을 붙인다.
 
-## MP3 파일 이름 번역
+## 본체 직접 실행 (세부 조정)
 
-1. `bash ~/bin/asmr_cover_embed.sh --export-names`를 실행한다. 일본어(가나·한자)가 있고 한글이 없는 MP3 이름이 `Download/mp3_names_ja.txt`에 작품별로 저장된다. 이미 한국어인 이름은 건너뛴다.
-2. 그 목록을 번역해 `원래 이름<TAB>새 이름` 형식의 번역표를 만든다.
-3. `bash ~/bin/asmr_cover_embed.sh --reuse-scan --rename-map 번역표.tsv`를 실행한다. DRY RUN으로 바뀔 이름만 보여 준다.
-4. 같은 명령에 `--apply`를 붙여 실제로 적용한다.
-
-- 바꾸는 것은 MP3 파일 이름뿐이다. 폴더 이름과 태그는 그대로 둔다. `\ / : * ? " < > |`는 전각 문자로 바꾼다.
-- SD 카드(SAF)에는 이름 바꾸기 명령이 없다. 그래서 새 이름으로 복사하고, 다시 읽어 SHA-256으로 확인한 뒤 원본을 지운다. `--local-dir` 폴더는 그냥 이름만 바꾼다.
-- 같은 폴더에 같은 이름의 파일이 이미 있으면 바꾸지 않는다. 단, 두 파일의 내용이 바이트 단위로 같으면 중단된 이전 작업으로 보고 원래 이름 쪽을 지운다.
-
-## 설치
-
-```bash
-pkg update
-pkg install python ffmpeg termux-api
-pip install mutagen
-# Termux:API 앱은 Termux와 같은 출처(F-Droid 또는 GitHub)에서 설치
-
-# SD 카드 Asmr 폴더 권한 (이미 줬다면 생략) 과 URI 확인
-termux-saf-managedir
-termux-saf-dirs
-
-# 스크립트 저장
-mkdir -p ~/bin && cp asmr_cover_embed.sh ~/bin/ && chmod +x ~/bin/asmr_cover_embed.sh
-```
-
-## 실행
+`asmr_cover_update.sh`는 아래 본체를 `--work-cover --other-images`로 부른다. 규칙을 바꿔 가며 보고 싶을 때 본체를 직접 쓴다.
 
 ```bash
 # 1) DRY RUN: 매칭표 확인 (아무것도 바꾸지 않음)
-bash ~/bin/asmr_cover_embed.sh
+bash ~/asmr_cover_embed.sh
 
 # 문제(AMBIGUOUS / NO IMAGE / 실패)만 보기. 스캔 결과는 재사용
-bash ~/bin/asmr_cover_embed.sh --reuse-scan --only-problems
+bash ~/asmr_cover_embed.sh --reuse-scan --only-problems
 
 # 2) 작품 하나, 3곡만 시험 적용
-bash ~/bin/asmr_cover_embed.sh --reuse-scan --work "작품 A" --apply --limit 3
+bash ~/asmr_cover_embed.sh --reuse-scan --work "작품 A" --apply --limit 3
 
 # 3) 전체 적용
-bash ~/bin/asmr_cover_embed.sh --reuse-scan --apply
+bash ~/asmr_cover_embed.sh --reuse-scan --apply
 ```
 
 루트 URI 기본값은 `content://com.android.externalstorage.documents/tree/0000-0000%3AAsmr`이고,
@@ -106,6 +79,26 @@ bash ~/bin/asmr_cover_embed.sh --reuse-scan --apply
 ```
 
 맨 아래 줄 형식(`작품 B/*`)은 그 작품에서 이름이 맞는 JPG가 없는 트랙에 대표 커버를 지정한다.
+
+## 커버 교체
+
+이미 커버가 있는 곡의 커버를 바꾸려면 작품 폴더에 새 이미지 1장만 남기고 `--replace`를 쓴다.
+실수로 전체를 바꾸지 않도록 `--work`로 작품을 반드시 지정해야 한다.
+이미 같은 커버가 들어 있는 곡은 건너뛴다.
+
+```bash
+bash ~/asmr_cover_update.sh --replace --work RJ01234567
+```
+
+## 이미지가 여러 장일 때 고르기 — cover_pick.py
+
+```bash
+python3 ~/cover_pick.py              # 후보마다 커버 모양 미리보기를 Download/cover_pick 에 만든다
+python3 ~/cover_pick.py W1=2 W3=1    # 고른 번호로 ~/cover_map.tsv 작성
+bash ~/asmr_cover_update.sh --map ~/cover_map.tsv
+```
+
+SD 카드의 파일은 읽기만 한다.
 
 ## 안전장치
 

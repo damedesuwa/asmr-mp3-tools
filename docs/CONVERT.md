@@ -1,21 +1,9 @@
-# snow_convert_final_v3.sh
+# 변환 — snow_convert_final_v3.sh
 
 이 스크립트는 휴대폰 폴더(기본: `~/storage/downloads/Moving`) 안의 오디오를 **MP3 320 kbps CBR / 44,100 Hz / Stereo**로 통일한다.
 변환이 끝나면 이어서 작품별 썸네일(240×240 Front Cover)까지 넣는다.
 
-## 설치 (Termux)
-
-```bash
-pkg install python ffmpeg termux-api
-pip install mutagen
-termux-setup-storage
-```
-
-같은 폴더(예: `~`)에 다음 파일 세 개를 둔다.
-
-- `snow_convert_final_v3.sh`: 변환
-- `asmr_cover_update.sh`: 썸네일 단계 실행기
-- `asmr_cover_embed.sh`: 썸네일 본체
+설치와 업데이트는 저장소 [README](../README.md)를 본다. 썸네일 단계에는 `asmr_cover_update.sh`와 `asmr_cover_embed.sh`가 같은 폴더에 있어야 한다 (`--self-update`가 함께 받는다).
 
 ## 실행
 

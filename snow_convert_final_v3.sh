@@ -359,7 +359,7 @@ cover_step() {
     echo "############################################################"
     echo "썸네일 단계"
     if [ -z "$w" ]; then
-        echo "  asmr_cover_update.sh 를 찾지 못해 건너뜁니다 (이 스크립트와 같은 폴더나 ~/bin 에 두세요)."
+        echo "  asmr_cover_update.sh 를 찾지 못해 건너뜁니다 (이 스크립트와 같은 폴더에 두세요. --self-update 로 함께 받아집니다)."
         return 0
     fi
     trap - INT TERM

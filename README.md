@@ -9,6 +9,7 @@ Android **Termux**에서 쓰는 ASMR 음원 정리 도구 모음이다.
 | `asmr_cover_update.sh` | 작품별 썸네일 적용을 한 번에 한다 (스캔 → 요약 → `y` → 적용). `--self-update` 기능도 있다 |
 | `asmr_cover_embed.sh` | 썸네일·이름 번역 본체. SD 카드(SAF)와 휴대폰 폴더(`--local-dir`)를 모두 지원한다 |
 | `cover_pick.py` | 이미지가 여러 장인 작품에서 커버 후보를 미리보고 고른다 |
+| `snowsky/` | SnowSky ECHO NANO용 도구. `snowsky_reorder.sh`는 SD 카드(SAF)의 MP3를 재생 순서대로 다시 복사하고, `snowsky_imgcheck.sh`는 폴더별 이미지 수를 읽기 전용으로 확인한다. `saf_*`는 SAF 동작 실험용 스크립트 (`damedesuwa/mymodel`에서 옮겨 옴) |
 
 자세한 설명은 다음 문서에 있다.
 

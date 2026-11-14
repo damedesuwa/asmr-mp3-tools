@@ -1,9 +1,8 @@
 # asmr-mp3-tools
 
-Android **Termux**에서 쓰는 ASMR 음원 정리 도구다.
-기준 환경은 Galaxy 휴대폰, 외장 SD 카드, Shanling M0 Pura / FiiO SnowSky다.
+Android **Termux**에서 쓰는 ASMR 음원 정리 스크립트다. 파일은 **`asmr_mp3.sh` 하나**뿐이다.
 
-## asmr_mp3.sh — 이것 하나로
+## asmr_mp3.sh
 
 휴대폰 폴더(기본 `~/storage/downloads/Moving`)를 한 번에 정리한다.
 
@@ -80,22 +79,13 @@ bash ~/asmr_mp3.sh --help
 
 이후 업데이트할 때는 `bash ~/asmr_mp3.sh --self-update` 한 줄이면 된다.
 
-## 그 밖의 도구 (필요할 때만)
-
-| 파일 | 하는 일 | 문서 |
-|---|---|---|
-| `asmr_cover_update.sh`, `asmr_cover_embed.sh` | **SD 카드(SAF)**에 이미 있는 MP3에 커버를 넣는다. `asmr_mp3.sh`는 SD 카드에 직접 쓰지 못하기 때문에 따로 둔다. 필요하면 `pkg install python termux-api`와 `pip install mutagen`을 추가로 설치한다 | [docs/COVER.md](docs/COVER.md) |
-| `snowsky/` | SnowSky ECHO NANO의 재생 순서 맞추기 | [docs/SNOWSKY.md](docs/SNOWSKY.md) |
-
-`bash ~/asmr_cover_update.sh --self-update`를 실행하면 위 도구와 `asmr_mp3.sh`를 한꺼번에 받는다.
-
 ## 개발
 
 ```bash
 bash tests/run.sh      # 필요: bash, python3 + mutagen, ffmpeg(libmp3lame)
 ```
 
-- **시험 환경:** 임시 폴더 하나를 SD 카드의 `Asmr` 폴더처럼 보여 주는 가짜 `termux-saf-*`(`tests/mock/`)로 돈다. 진짜 SD 카드나 네트워크는 쓰지 않는다.
+- **시험 환경:** 임시 폴더에 시험용 오디오·이미지를 만들어 돌린다. 네트워크는 쓰지 않는다.
 - **작업 폴더 유지:** `KEEP=1 bash tests/run.sh`로 실행하면 작업 폴더를 지우지 않는다.
 - **CI:** GitHub에 올릴 때마다 같은 시험이 자동으로 돈다(`.github/workflows/test.yml`).
 - **수정한 뒤에는:** `bash tests/run.sh`를 통과시키고 `CHANGELOG.md`에 한 줄을 적는다.

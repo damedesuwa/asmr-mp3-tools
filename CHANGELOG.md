@@ -1,5 +1,10 @@
 # 변경 기록
 
+## 2026-11-14 — asmr_mp3.sh 하나만 남김
+
+- **삭제:** SD 카드(SAF) 커버 도구(`asmr_cover_update.sh`, `asmr_cover_embed.sh`), SnowSky 도구(`snowsky/`), 관련 문서(`docs/`)와 시험(`tests/mock/`)을 지웠다.
+- **남은 것:** 저장소에는 `asmr_mp3.sh`와 그 시험만 남았다.
+
 ## 2026-11-14 — 변환과 커버를 asmr_mp3.sh 하나로
 
 - **`asmr_mp3.sh` 추가:** 변환(MP3 320k/44.1k/Stereo)과 작품별 커버(240×240)를 한 파일, 한 번의 실행으로 처리한다. ffmpeg 말고는 다른 스크립트나 파이썬 모듈이 필요 없다.

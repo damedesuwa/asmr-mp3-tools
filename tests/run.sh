@@ -11,6 +11,8 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/asmr-tools-test.XXXXXX")"
 [ -n "${KEEP:-}" ] || trap 'rm -rf "$WORK"' EXIT; [ -n "${KEEP:-}" ] && echo "작업 폴더: $WORK"
 
+# HOME 을 바꾸기 전에 pip --user 로 설치한 모듈(mutagen) 위치를 붙잡아 둔다
+PYTHONUSERBASE="$(python3 -m site --user-base 2>/dev/null)" && export PYTHONUSERBASE
 export HOME="$WORK/home"
 export ASMR_COVER_HOME="$WORK/state"
 export PATH="$REPO/tests/mock:$PATH"

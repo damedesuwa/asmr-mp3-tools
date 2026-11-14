@@ -23,7 +23,7 @@ MAIN="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/asmr_cover_embed.sh"
 REPO="${ASMR_TOOLS_REPO:-damedesuwa/asmr-mp3-tools}"
 BRANCH="${ASMR_TOOLS_BRANCH:-main}"
 # 저장소 안 경로. 휴대폰에는 이 스크립트 옆에 파일 이름만으로 받는다.
-TOOL_FILES="${ASMR_TOOLS_FILES:-snow_convert_final_v3.sh asmr_cover_update.sh asmr_cover_embed.sh cover_pick.py
+TOOL_FILES="${ASMR_TOOLS_FILES:-asmr_mp3.sh asmr_cover_update.sh asmr_cover_embed.sh
 snowsky/snowsky_reorder.sh snowsky/snowsky_imgcheck.sh snowsky/snowsky_audit.sh}"
 STATE="${ASMR_COVER_HOME:-$HOME/.asmr_cover}"
 RULES=(--work-cover --other-images)

@@ -1,5 +1,14 @@
 # 변경 기록
 
+## 2026-11-14 — 변환과 커버를 asmr_mp3.sh 하나로
+
+- **`asmr_mp3.sh` 추가:** 변환(MP3 320k/44.1k/Stereo)과 작품별 커버(240×240)를 한 파일, 한 번의 실행으로 처리한다. ffmpeg 말고는 다른 스크립트나 파이썬 모듈이 필요 없다.
+  - 이미지가 여러 장인 작품은 `--apply` 때 번호를 물어본다.
+  - 규격에 맞는 MP3는 다시 인코딩하지 않고 커버만 붙인다. 오디오는 그대로라는 것을 검사로 확인한다.
+  - `--replace`로 이미 있는 커버도 바꿀 수 있고, `--self-update`로 자기 자신을 최신판으로 교체한다.
+- **합쳐서 없앤 것:** `snow_convert_final_v3.sh`, `cover_pick.py`, `docs/CONVERT.md`를 지웠다.
+- **SD 카드용 도구:** `asmr_cover_update.sh`와 `asmr_cover_embed.sh`는 SD 카드(SAF)용으로 남겼다. `--self-update`가 받는 목록을 새 구성에 맞췄다.
+
 ## 2026-11-14 — 쓰지 않는 기능 제거
 
 - **MP3 파일 이름 번역 제거:** `--export-names`, `--rename-map` 옵션과 `docs/RENAME.md`를 없앴다. 관련 시험 항목도 함께 뺐다.

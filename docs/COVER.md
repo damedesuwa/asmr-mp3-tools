@@ -1,4 +1,7 @@
-# 썸네일 — asmr_cover_update.sh / asmr_cover_embed.sh / cover_pick.py
+# SD 카드 썸네일 — asmr_cover_update.sh / asmr_cover_embed.sh
+
+휴대폰 폴더(Moving)는 `asmr_mp3.sh` 하나로 변환과 커버를 함께 처리한다 (README 참고).
+이 문서의 두 스크립트는 **외장 SD 카드(SAF)에 이미 있는 MP3**에 커버를 넣을 때 쓴다.
 
 외장 SD 카드(SAF)의 작품 폴더마다 JPG를 240×240 **Front Cover**로 만들어
 같은 작품의 MP3에 넣는다. 기본 실행은 **DRY RUN**이며 `--apply`를 줘야만 파일이 바뀐다.
@@ -90,15 +93,6 @@ bash ~/asmr_cover_embed.sh --reuse-scan --apply
 bash ~/asmr_cover_update.sh --replace --work RJ01234567
 ```
 
-## 이미지가 여러 장일 때 고르기 — cover_pick.py
-
-```bash
-python3 ~/cover_pick.py              # 후보마다 커버 모양 미리보기를 Download/cover_pick 에 만든다
-python3 ~/cover_pick.py W1=2 W3=1    # 고른 번호로 ~/cover_map.tsv 작성
-bash ~/asmr_cover_update.sh --map ~/cover_map.tsv
-```
-
-SD 카드의 파일은 읽기만 한다.
 
 ## 안전장치
 

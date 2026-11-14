@@ -8,7 +8,6 @@ Galaxy 휴대폰 + 외장 SD 카드 + Shanling M0 Pura / FiiO SnowSky 조합을 
 | 휴대폰 폴더의 오디오를 MP3 320k로 통일하고 썸네일까지 | `bash ~/snow_convert_final_v3.sh --apply` | [docs/CONVERT.md](docs/CONVERT.md) |
 | SD 카드 작품들에 썸네일 넣기 | `bash ~/asmr_cover_update.sh` | [docs/COVER.md](docs/COVER.md) |
 | 한 작품의 커버 바꾸기 | `bash ~/asmr_cover_update.sh --replace --work RJ01234567` | [docs/COVER.md](docs/COVER.md) |
-| 일본어·중국어 MP3 파일 이름 번역 | `bash ~/asmr_cover_embed.sh --export-names` → 번역표 → `--rename-map` | [docs/RENAME.md](docs/RENAME.md) |
 | SnowSky 재생 순서 맞추기 | `bash ~/snowsky_reorder.sh` | [docs/SNOWSKY.md](docs/SNOWSKY.md) |
 | 도구를 최신판으로 | `bash ~/asmr_cover_update.sh --self-update` | 아래 |
 
@@ -58,7 +57,7 @@ bash ~/asmr_cover_update.sh --self-update
 ```
 snow_convert_final_v3.sh   변환 (+ 끝나면 썸네일 단계)
 asmr_cover_update.sh       썸네일 한 번에 적용, --self-update
-asmr_cover_embed.sh        썸네일·커버 교체·이름 번역 본체 (SAF / --local-dir)
+asmr_cover_embed.sh        썸네일·커버 교체 본체 (SAF / --local-dir)
 cover_pick.py              이미지가 여러 장인 작품의 커버 고르기
 snowsky/                   SnowSky ECHO NANO 재생 순서 도구 (experiments/ 는 SAF 실험)
 docs/                      도구별 설명
@@ -75,7 +74,7 @@ bash tests/run.sh      # 필요: bash, python3 + mutagen, ffmpeg(libmp3lame)
 ```
 
 시험은 임시 폴더 하나를 SD 카드의 `Asmr` 폴더처럼 보여 주는 가짜 `termux-saf-*`(`tests/mock/`)로 돈다.
-진짜 SD 카드나 네트워크는 쓰지 않는다. 변환, Ctrl+C 중단, 썸네일 규칙, 덮어쓰기가 잘리지 않는 기기에서의 중단, 커버 교체, 이름 번역, 휴대폰 폴더 모드를 확인한다.
+진짜 SD 카드나 네트워크는 쓰지 않는다. 변환, Ctrl+C 중단, 썸네일 규칙, 덮어쓰기가 잘리지 않는 기기에서의 중단, 커버 교체, 휴대폰 폴더 모드를 확인한다.
 `KEEP=1 bash tests/run.sh`로 실행하면 작업 폴더를 지우지 않는다.
 
 수정한 뒤에는 `bash tests/run.sh`를 통과시키고 `CHANGELOG.md`에 한 줄을 적는다.

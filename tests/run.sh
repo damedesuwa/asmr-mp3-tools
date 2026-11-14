@@ -137,26 +137,6 @@ image "$SD/D/d.jpg" 640x200
 printf 'y\n' | bash "$UPDATE" --replace --work D > "$WORK/rep.log" 2>&1
 check "--replace: 커버가 1개로 교체" test "$(pics "$SD/D/has.mp3")" = 1 -a "$(sum "$SD/D/has.mp3")" != "$has0"
 
-# ------------------------------------------------------------------ 이름 번역 (SAF)
-section "이름 번역 (SAF)"
-tone "$SD/J/SE有/01_耳かき.mp3" 1 300 -c:a libmp3lame
-tone "$SD/J/SE無/01_耳かき.mp3" 1 300 -c:a libmp3lame
-tone "$SD/J/02 속삭임 囁き.mp3" 1 310 -c:a libmp3lame
-tone "$SD/J/03 后辈人妻.mp3" 1 320 -c:a libmp3lame
-tone "$SD/J/04 収録.mp3" 1 330 -c:a libmp3lame
-tone "$SD/J/04 녹음.mp3" 1 340 -c:a libmp3lame
-j0="$(sum "$SD/J/SE有/01_耳かき.mp3")"
-bash "$EMBED" --work J --export-names "$WORK/names.txt" > /dev/null 2>&1
-check "목록: 한글이 섞인 이름은 제외" sh -c "! grep -q '속삭임' '$WORK/names.txt'"
-check "목록: 같은 이름은 한 번만" test "$(grep -c '01_耳かき' "$WORK/names.txt")" = 1
-check "목록: 중국어 제목 포함" grep -q '后辈人妻' "$WORK/names.txt"
-printf '01_耳かき\t01_귀청소?\n03 后辈人妻\t03 후배 유부녀\n04 収録\t04 녹음\n' > "$WORK/map.tsv"
-bash "$EMBED" --reuse-scan --work J --rename-map "$WORK/map.tsv" --apply --yes > "$WORK/ren.log" 2>&1
-check "이름 변경 + FAT 금지 문자는 전각으로" test -f "$SD/J/SE有/01_귀청소？.mp3" -a -f "$SD/J/SE無/01_귀청소？.mp3"
-check "이름 변경 후 내용 그대로" test "$(sum "$SD/J/SE有/01_귀청소？.mp3")" = "$j0"
-check "원래 이름 파일은 사라짐" test ! -e "$SD/J/SE有/01_耳かき.mp3"
-check "같은 이름 파일이 있으면 바꾸지 않음" test -f "$SD/J/04 収録.mp3" -a -f "$SD/J/04 녹음.mp3"
-
 # ------------------------------------------------------------------ 로컬 폴더
 section "--local-dir"
 L="$WORK/local"
@@ -165,9 +145,6 @@ image "$L/W/c.webp" 400x400 2>/dev/null || image "$L/W/c.png" 400x400
 printf 'y\n' | bash "$UPDATE" --local-dir "$L" > "$WORK/loc.log" 2>&1
 check "로컬 폴더 커버 (WEBP/PNG)" test "$(cover "$L/W/sub/01_耳かき.mp3")" = "240,240"
 check "로컬 폴더에 임시 파일이 남지 않음" test -z "$(find "$L" -name '*.coverembed.tmp')"
-printf '01_耳かき\t01_귀청소\n' > "$WORK/lmap.tsv"
-bash "$EMBED" --local-dir "$L" --rename-map "$WORK/lmap.tsv" --apply --yes > /dev/null 2>&1
-check "로컬 폴더 이름 변경" test -f "$L/W/sub/01_귀청소.mp3"
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

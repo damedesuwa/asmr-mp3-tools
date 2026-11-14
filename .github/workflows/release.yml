@@ -1,0 +1,23 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag must match the script's VERSION
+        run: |
+          v="$(grep -m1 '^VERSION=' asmr_mp3.sh | cut -d'"' -f2)"
+          [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME != VERSION v$v"; exit 1; }
+      - name: Notes from CHANGELOG
+        run: |
+          awk -v t="## $GITHUB_REF_NAME " 'index($0,t)==1 {f=1; next} /^## / {f=0} f' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "Release $GITHUB_REF_NAME" > notes.md
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" asmr_mp3.sh --title "$GITHUB_REF_NAME" --notes-file notes.md

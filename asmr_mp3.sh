@@ -7,10 +7,12 @@
 #   --dir 경로                    처리할 폴더 (기본: ~/storage/downloads/Moving)
 #   --replace                     이미 커버가 있는 MP3 의 커버도 새로 넣음
 #   --self-update                 이 스크립트를 저장소의 최신판으로 교체
+#   --version                     버전 표시
 #
 # 필요한 것: ffmpeg (Termux: pkg install ffmpeg). 다른 스크립트·파이썬 모듈은 쓰지 않는다.
 set -uo pipefail
 
+VERSION="1.0.0"
 DEFAULT_DIR="$HOME/storage/downloads/Moving"
 AUDIO_EXTS="mp3 wav flac m4a aac ogg opus wma aiff aif mp4"
 IMAGE_EXTS="jpg jpeg png webp bmp gif"
@@ -64,7 +66,7 @@ self_update() {
         "https://api.github.com/repos/$repo/contents/asmr_mp3.sh?ref=$sha" && bash -n "$me.new" || {
         rm -f "$me.new"; echo "받기 실패"; return 1; }
     chmod +x "$me.new" && mv -f "$me.new" "$me"
-    echo "최신판으로 교체했습니다 (${sha:0:7}): $me"
+    echo "최신판으로 교체했습니다 (${sha:0:7}, v$(grep -m1 '^VERSION=' "$me" | cut -d'"' -f2)): $me"
 }
 
 MODE=dry DIR="$DEFAULT_DIR" REPLACE=0
@@ -76,6 +78,7 @@ while [ $# -gt 0 ]; do
         --self-update) self_update; exit $? ;;
         --dir) shift; DIR="${1:-}" ;;
         --help|-h) usage; exit 0 ;;
+        --version|-v) echo "asmr_mp3 $VERSION"; exit 0 ;;
         *) echo "알 수 없는 옵션: $1 (--help 참고)" >&2; exit 2 ;;
     esac
     shift
@@ -169,7 +172,7 @@ while IFS= read -r -d '' f; do
 done < <(find "$DIR" -type f -print0 | sort -z)
 TOTAL=${#FILES[@]}
 
-echo "asmr_mp3 — $([ $MODE = apply ] && echo '실제 적용' || echo '미리보기 (변경 없음)')"
+echo "asmr_mp3 v$VERSION — $([ $MODE = apply ] && echo '실제 적용' || echo '미리보기 (변경 없음)')"
 echo "폴더: $DIR"
 echo "출력: MP3 320 kbps CBR / 44,100 Hz / Stereo / LAME, 작품 커버 ${COVER_PX}x${COVER_PX}"
 echo "오디오 파일: ${TOTAL}개"

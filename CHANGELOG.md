@@ -1,5 +1,15 @@
 # 변경 기록
 
+## v1.0.0 — 2026-11-14
+
+첫 릴리스. 이 저장소는 `asmr_mp3.sh` 하나다.
+
+- 폴더(기본 `~/storage/downloads/Moving`)의 오디오(mp3 wav flac m4a aac ogg opus wma aiff aif mp4)를 MP3 320 kbps CBR / 44.1 kHz / Stereo(LAME)로 통일한다.
+- 작품 폴더마다 이미지를 240×240 Front Cover로 잘라 넣는다. 이미지가 여러 장이면 `--apply` 때 번호를 묻는다.
+- 규격에 맞는 MP3는 다시 인코딩하지 않고 커버만 붙인다.
+- 임시 파일을 만들어 검사한 뒤 옮기고, 최종 위치에서 다시 검사한 다음에만 원본을 지운다.
+- `--replace`, `--dir`, `--self-update`, `--version`을 지원한다.
+
 ## 2026-11-14 — asmr_mp3.sh 하나만 남김
 
 - **삭제:** SD 카드(SAF) 커버 도구(`asmr_cover_update.sh`, `asmr_cover_embed.sh`), SnowSky 도구(`snowsky/`), 관련 문서(`docs/`)와 시험(`tests/mock/`)을 지웠다.

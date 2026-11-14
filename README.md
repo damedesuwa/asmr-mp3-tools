@@ -15,6 +15,7 @@ bash ~/asmr_mp3.sh --apply      # 실제 적용
 bash ~/asmr_mp3.sh --apply --replace   # 이미 있는 커버도 새로 넣기
 bash ~/asmr_mp3.sh --dir 다른폴더       # 다른 폴더
 bash ~/asmr_mp3.sh --self-update        # 최신판으로 교체
+bash ~/asmr_mp3.sh --version            # 버전 확인
 bash ~/asmr_mp3.sh --help
 ```
 
@@ -88,4 +89,5 @@ bash tests/run.sh      # 필요: bash, python3 + mutagen, ffmpeg(libmp3lame)
 - **시험 환경:** 임시 폴더에 시험용 오디오·이미지를 만들어 돌린다. 네트워크는 쓰지 않는다.
 - **작업 폴더 유지:** `KEEP=1 bash tests/run.sh`로 실행하면 작업 폴더를 지우지 않는다.
 - **CI:** GitHub에 올릴 때마다 같은 시험이 자동으로 돈다(`.github/workflows/test.yml`).
-- **수정한 뒤에는:** `bash tests/run.sh`를 통과시키고 `CHANGELOG.md`에 한 줄을 적는다.
+- **수정한 뒤에는:** `bash tests/run.sh`를 통과시키고 `CHANGELOG.md`에 적는다.
+- **릴리스:** `asmr_mp3.sh`의 `VERSION`과 `CHANGELOG.md` 맨 위 `## vX.Y.Z` 제목을 같은 버전으로 올린다. 그다음 `git tag vX.Y.Z && git push origin vX.Y.Z`를 하면 `release.yml`이 GitHub 릴리스를 만든다. 태그와 `VERSION`이 다르면 실패한다.

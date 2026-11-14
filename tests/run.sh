@@ -104,5 +104,7 @@ check "Ctrl+C: 종료 코드 130" test $? -eq 0
 check "Ctrl+C: 원본 그대로" test "$(sum "$I/W/long.wav")" = "$s0"
 check "Ctrl+C: 임시·결과 파일 없음" test "$(ls -A "$I/W" | tr '\n' ' ')" = "c.jpg long.wav "
 
+check "--version: CHANGELOG 의 최신 버전과 같다" test "$(bash "$MP3" --version)" = "asmr_mp3 $(sed -n 's/^## v\([0-9.]*\).*/\1/p' "$REPO/CHANGELOG.md" | head -n 1)"
+
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]
